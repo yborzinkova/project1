@@ -13,7 +13,7 @@ class Article(db.Model):
     title=db.Column(db.String(100),nullable=False)
     intro=db.Column(db.String(300),nullable=False)
     text=db.Column(db.Text,nullable=False)
-    data=db.Column(db.DateTime,default=datetime)
+    data=db.Column(db.DateTime,default=datetime.now())
 
     def __repr__(self):
         return '<Article%r>'% self.id
@@ -30,6 +30,12 @@ def index():
 @app.route('/about')
 def about():#put application's code here
     return render_template("about.html")
+
+@app.route('/posts')
+def posts():
+    articles=Article.query.order_by(Article.data).all()
+    return render_template('posts.html',articles=articles)
+
 
 @app.route('/posts/<int:id>')
 def post_detail(id):
